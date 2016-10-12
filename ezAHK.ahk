@@ -6,6 +6,32 @@
 
 
 
+; ===== ctrl-` 根据所在目录打开终端 =====
+~^`::
+    path := Explorer_GetPath()
+    sel := Explorer_GetSelected()
+    
+    IfInString, sel, \
+    {
+        path := sel
+    }
+    
+    IfInString, path, \
+    {
+        run ConEmu.exe -Dir %path% -run {Git bash} 
+    }
+return
+
+
+
+; ===== ctrl-shift-d 输入系统日期 =====
+^+d::
+    FormatTime, now_date, %A_Now%, yyyy-MM-dd
+    Send, % now_date
+return
+
+
+
 ; ===== 鼠标中键, 复制内容. =====
 MButton::
     send ^c
@@ -55,37 +81,11 @@ return
 
 
 
-; ===== ctrl-` 根据所在目录打开终端 =====
-~^`::
-    path := Explorer_GetPath()
-    sel := Explorer_GetSelected()
-    
-    IfInString, sel, \
-    {
-        path := sel
-    }
-    
-    IfInString, path, \
-    {
-        run ConEmu.exe -Dir %path% -run {Git bash} 
-    }
-return
-
-
-
-; ===== ctrl-↑ ↓ ← → 单像素移动 =====
+; ===== ctrl-上下左右 单像素移动 =====
 ^Left::  MouseMove, -1,  0,, R
 ^Up::    MouseMove,  0, -1,, R
 ^Right:: MouseMove,  1,  0,, R
 ^Down::  MouseMove,  0,  1,, R
-
-
-
-; ===== ctrl-shift-d 输入系统日期 =====
-^+d::
-    FormatTime, now_date, %A_Now%, yyyy-MM-dd
-    Send, % now_date
-return
 
 
 
