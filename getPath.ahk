@@ -99,11 +99,25 @@ Explorer_Get(hwnd="",selection=false)
     else
     {
         if selection
+        {
             collection := window.document.SelectedItems
+            for item in collection
+            {
+                if (RegExMatch(item.path,"\.lnk$"))         ; 是否为快捷方式
+                {
+                    FileGetShortcut, % item.path, path
+                    ret .= path "`n"
+                }
+                else 
+                    ret .= item.path "`n"
+            }
+        }
         else
+        {
             collection := window.document.Folder.Items
-        for item in collection
-            ret .= item.path "`n"
+            for item in collection
+                ret .= item.path "`n"
+        }
     }
     return Trim(ret,"`n")
 }

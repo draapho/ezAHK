@@ -13,25 +13,18 @@
 
     IfInString, sel, \
     {
-        path := sel
+        if InStr(FileExist(sel),"D")
+            path := sel
     }
 
     IfInString, path, \
-    {
-        if InStr(FileExist(path),"D")
+    {        
+        try
         {
             path := "`"`"" path "`"`""              ; 加上双引号, 不知为何要转义两遍...
             run ConEmu.exe -Dir %path% -run {Git bash}
         }
     }
-return
-
-
-
-; ===== ctrl-shift-d 输入系统日期 =====
-^+d::
-    FormatTime, now_date, %A_Now%, yyyy-MM-dd
-    Send, % now_date
 return
 
 
@@ -43,8 +36,15 @@ MButton::
     Hotkey, RButton, on
 return
 
-; ===== ctrl-鼠标中键, 复制路径 =====
-^MButton::
+; ===== shift-鼠标中键, 剪切内容. =====
++MButton::
+    send ^x
+    Hotkey, RButton, Paste
+    Hotkey, RButton, on
+return
+
+; ===== ctrl-shift-鼠标中键, 复制路径 =====
+^+MButton::
     path := Explorer_GetPath()
     sel := Explorer_GetSelected()
 
@@ -61,8 +61,8 @@ return
     }
 return
 
-; ===== ctrl-shift-鼠标中键, 屏幕取色 =====
-^+MButton::
+; ===== alt-win-鼠标中键, 屏幕取色 =====
+#!MButton::
     MouseGetPos, mouseX, mouseY
     PixelGetColor, color, %mouseX%, %mouseY%, RGB
     StringRight color,color,6
@@ -70,7 +70,7 @@ return
     Hotkey, RButton, Paste
     Hotkey, RButton, on
 
-    tooltip, RGB:%color% have copied
+    tooltip, RGB:%color% has copied
     sleep 2000
     tooltip,
 return
@@ -85,11 +85,19 @@ return
 
 
 
-; ===== ctrl-上下左右 单像素移动 =====
-^Left::  MouseMove, -1,  0,, R
-^Up::    MouseMove,  0, -1,, R
-^Right:: MouseMove,  1,  0,, R
-^Down::  MouseMove,  0,  1,, R
+; ===== alt-win-上下左右 单像素移动 =====
+#!Left::  MouseMove, -1,  0,, R
+#!Up::    MouseMove,  0, -1,, R
+#!Right:: MouseMove,  1,  0,, R
+#!Down::  MouseMove,  0,  1,, R
+
+
+
+; ===== alt-win-d 输入系统日期 =====
+#!d::
+    FormatTime, now_date, %A_Now%, yyyy-MM-dd
+    Send, % now_date
+return
 
 
 
